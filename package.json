@@ -17,5 +17,9 @@
   "bugs": {
     "url": "https://github.com/autumnchris/pomodoro-timer-react/issues"
   },
-  "homepage": "https://autumnchris.github.io/pomodoro-timer-react"
+  "homepage": "https://autumnchris.github.io/pomodoro-timer-react",
+  "dependencies": {
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1"
+  }
 }

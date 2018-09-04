@@ -150,6 +150,19 @@ html {
         }
       }
     }
+    .timer-button,
+    .timer-button:active,
+    .timer-button:focus {
+      background: $blue;
+      border: 2px solid $blue;
+      height: 45px;
+      margin: 5px;
+      width: 45px;
+      &:hover {
+        background: transparent;
+        color: $blue;
+      }
+    }
   }
   footer {
     background: rgba(13, 13, 13, 0.2);

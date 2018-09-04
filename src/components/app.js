@@ -89,10 +89,10 @@ export default class App extends Component {
           {/* TIMER BUTTONS */}
           <div className="button-group">
             <button type="button" className="timer-button" aria-label="Play" title="Play">
-              <span className="fa fa-play fa-2x"></span>
+              <span className="fa fa-play fa-lg"></span>
             </button>
             <button type="button" className="timer-button" aria-label="Reset" title="Reset">
-              <span className="fa fa-redo-alt fa-2x"></span>
+              <span className="fa fa-redo-alt fa-lg"></span>
             </button>
           </div>
           {/* AUDIO */}

@@ -53,4 +53,23 @@ html {
       background: rgba(13, 13, 13, 0.2);
     }
   }
+  footer {
+    background: rgba(13, 13, 13, 0.2);
+    bottom: 0;
+    color: $white;
+    font-size: 0.8rem;
+    left: 0;
+    letter-spacing: 2px;
+    padding: 14px 0;
+    position: absolute;
+    right: 0;
+    width: 100%;
+    a,
+    a:visited,
+    a:hover,
+    a:active,
+    a:focus {
+      color: $blue;
+    }
+  }
 }

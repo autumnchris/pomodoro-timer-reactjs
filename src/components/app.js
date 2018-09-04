@@ -6,6 +6,10 @@ export default class App extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      modalStyle: {display: 'none'},
+      errorStyle: {display: 'none'}
+    };
   }
 
   render() {
@@ -19,7 +23,7 @@ export default class App extends Component {
             <span className="fa fa-cog"></span>
           </button>
           {/* SETTINGS MODAL */}
-          <div id="modal">
+          <div id="modal" style={this.state.modalStyle}>
             <div className="modal-content">
               <div className="modal-header">
                 <h2>Timer Settings</h2>
@@ -36,7 +40,7 @@ export default class App extends Component {
                     <input type="text" name="breakTimerInput" id="break-timer-input" required />
                   </div>
                   {/* ERROR MESSAGE */}
-                  <p className="message error-message"><span className="fa fa-exclamation-circle fa-lg fa-fw"></span> Please enter numbers between 1 and 60.</p>
+                  <p className="message error-message" style={this.state.errorStyle}><span className="fa fa-exclamation-circle fa-lg fa-fw"></span> Please enter numbers between 1 and 60.</p>
                   {/* FORM BUTTONS */}
                   <div className="button-group">
                     <input type="submit" value="Save" />

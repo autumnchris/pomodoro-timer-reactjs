@@ -12,6 +12,29 @@ export default class App extends Component {
     };
   }
 
+  openModal() {
+    this.setState({
+      modalStyle: {display: 'block'}
+    });
+  }
+
+  closeModal() {
+    this.setState({
+      modalStyle: {display: 'none'}
+    });
+  }
+
+  componentDidMount() {
+    window.addEventListener('click', (event) => {
+
+      if (event.target.id === 'modal') {
+        this.setState({
+          modalStyle: {display: 'none'}
+        });
+      }
+    });
+  }
+
   render() {
     return (
       <div className="body">
@@ -19,7 +42,7 @@ export default class App extends Component {
         <header>
           <h1>Pomodoro Timer</h1>
           {/* SETTINGS BUTTON */}
-          <button type="button" className="settings" aria-label="Settings" title="Settings">
+          <button type="button" className="settings" onClick={() => this.openModal()} aria-label="Settings" title="Settings">
             <span className="fa fa-cog"></span>
           </button>
           {/* SETTINGS MODAL */}
@@ -44,7 +67,7 @@ export default class App extends Component {
                   {/* FORM BUTTONS */}
                   <div className="button-group">
                     <input type="submit" value="Save" />
-                    <input type="button" value="Cancel" />
+                    <input type="button" onClick={() => this.closeModal()} value="Cancel" />
                   </div>
                 </form>
               </div>

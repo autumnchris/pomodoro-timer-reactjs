@@ -100,6 +100,23 @@ html {
           padding: 15px 10px;
           width: 100%;
         }
+        .button-group {
+          text-align: right;
+          input[type=submit],
+          input[type=submit]:active,
+          input[type=submit]:focus,
+          input[type=button],
+          input[type=button]:active,
+          input[type=button]:focus {
+            background: #404040;
+            color: $blue;
+            margin: 0 3px;
+            padding: 10px;
+            &:hover {
+              background: $dark-gray;
+            }
+          }
+        }
       }
     }
   }

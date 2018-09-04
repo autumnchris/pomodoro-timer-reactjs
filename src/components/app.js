@@ -14,6 +14,38 @@ export default class App extends Component {
         {/* HEADER */}
         <header>
           <h1>Pomodoro Timer</h1>
+          {/* SETTINGS BUTTON */}
+          <button type="button" className="settings" aria-label="Settings" title="Settings">
+            <span className="fa fa-cog"></span>
+          </button>
+          {/* SETTINGS MODAL */}
+          <div id="modal">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h2>Timer Settings</h2>
+              </div>
+              <div className="modal-body">
+                {/* SETTINGS FORM */}
+                <form className="settings-form">
+                  <div className="form-group">
+                    <label htmlFor="work-timer-input">Set Work Time:</label>
+                    <input type="text" name="workTimerInput" id="work-timer-input" required />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="break-timer-input">Set Break Time:</label>
+                    <input type="text" name="breakTimerInput" id="break-timer-input" required />
+                  </div>
+                  {/* ERROR MESSAGE */}
+                  <p className="message error-message"><span className="fa fa-exclamation-circle fa-lg fa-fw"></span> Please enter numbers between 1 and 60.</p>
+                  {/* FORM BUTTONS */}
+                  <div className="button-group">
+                    <input type="submit" value="Save" />
+                    <input type="button" value="Cancel" />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
         </header>
         <main>
           {/* TIMERS */}

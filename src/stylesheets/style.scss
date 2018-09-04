@@ -4,3 +4,53 @@ $blue: #1ad1ff;
 
 $tablet-view: 330px;
 $desktop-view: 640px;
+
+*:focus {
+  box-shadow: 0 0 3px 3px rgba(65, 180, 250, 0.8);
+  outline: none;
+}
+
+html {
+  background: $dark-gray;
+  background: linear-gradient(120deg, #262626, #4d4d4d) fixed;
+  button,
+  button:hover,
+  button:active,
+  button:focus,
+  input[type=submit],
+  input[type=submit]:hover,
+  input[type=submit]:active,
+  input[type=submit]:focus,
+  input[type=button],
+  input[type=button]:hover,
+  input[type=button]:active,
+  input[type=button]:focus {
+    border-radius: 3px;
+  }
+  h1 {
+    color: $white;
+    display: inline-block;
+    float: left;
+    font-size: 0.7rem;
+    font-weight: 300;
+    letter-spacing: 8px;
+    margin-top: 15px;
+    text-transform: uppercase;
+    @media only screen and (min-width: $tablet-view) {
+      font-size: 0.9rem;
+    }
+  }
+  .settings,
+  .settings:active,
+  .settings:focus {
+    background: transparent;
+    color: $blue;
+    float: right;
+    height: 30px;
+    margin-top: 8px;
+    width: 30px;
+    &:hover {
+      background: rgba(13, 13, 13, 0.2);
+    }
+  }
+}

@@ -7,9 +7,24 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      workMinutes: null,
+      workSeconds: null,
+      breakMinutes: null,
+      breakSeconds: null,
       modalStyle: {display: 'none'},
       errorStyle: {display: 'none'}
     };
+    this.workTimer = JSON.parse(localStorage.getItem('workTimer')) || 1500;
+    this.breakTimer = JSON.parse(localStorage.getItem('breakTimer')) || 300;
+  }
+
+  setNewTimer() {
+    this.setState({
+      workMinutes: parseInt(this.workTimer / 60, 10),
+      workSeconds: parseInt(this.workTimer % 60, 10),
+      breakMinutes: parseInt(this.breakTimer / 60, 10),
+      breakSeconds: parseInt(this.breakTimer % 60, 10)
+    });
   }
 
   openModal() {
@@ -25,6 +40,8 @@ export default class App extends Component {
   }
 
   componentDidMount() {
+    this.setNewTimer();
+
     window.addEventListener('click', (event) => {
 
       if (event.target.id === 'modal') {
@@ -79,11 +96,11 @@ export default class App extends Component {
           <div className="timers">
             <div className="timer-card">
               <h2>Work Session</h2>
-              <div className="timer">25:00</div>
+              <div className="timer">{this.state.workMinutes < 10 ? `0${this.state.workMinutes}` : this.state.workMinutes}:{this.state.workSeconds < 10 ? `0${this.state.workSeconds}` : this.state.workSeconds}</div>
             </div>
             <div className="timer-card">
               <h2>Break Session</h2>
-              <div className="timer">05:00</div>
+              <div className="timer">{this.state.breakMinutes < 10 ? `0${this.state.breakMinutes}` : this.state.breakMinutes}:{this.state.breakSeconds < 10 ? `0${this.state.breakSeconds}` : this.state.breakSeconds}</div>
             </div>
           </div>
           {/* TIMER BUTTONS */}

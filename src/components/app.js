@@ -16,8 +16,11 @@ export default class App extends Component {
       modalStyle: {display: 'none'},
       errorStyle: {display: 'none'}
     };
+    this.timer = null;
     this.workTimer = JSON.parse(localStorage.getItem('workTimer')) || 1500;
     this.breakTimer = JSON.parse(localStorage.getItem('breakTimer')) || 300;
+    this.audioHasPlayed = false;
+    this.playTimer = this.playTimer.bind(this);
   }
 
   setNewTimer() {
@@ -29,6 +32,52 @@ export default class App extends Component {
       breakMinutes: parseInt(this.breakTimer / 60, 10),
       breakSeconds: parseInt(this.breakTimer % 60, 10)
     });
+  }
+
+  countDown() {
+    this.timer = setInterval(this.playTimer, 1000);
+  }
+
+  playTimer() {
+
+    if (this.workTimer !== 0) {
+      this.workTimer--;
+      this.setState({
+        workMinutes: parseInt(this.workTimer / 60, 10),
+        workSeconds: parseInt(this.workTimer % 60, 10)
+      });
+      document.title = `Work – ${this.state.workMinutes < 10 ? '0' + this.state.workMinutes : this.state.workMinutes}:${this.state.workSeconds < 10 ? '0' + this.state.workSeconds : this.state.workSeconds}`;
+    }
+    else {
+
+      if (this.audioHasPlayed === false) {
+        document.querySelector('audio').play();
+        this.audioHasPlayed = true;
+      }
+
+      if (this.breakTimer !== 0) {
+        this.breakTimer--;
+        this.setState({
+          breakMinutes: parseInt(this.breakTimer / 60, 10),
+          breakSeconds: parseInt(this.breakTimer % 60, 10)
+        });
+        document.title = `Break – ${this.state.breakMinutes < 10 ? '0' + this.state.breakMinutes : this.state.breakMinutes}:${this.state.breakSeconds < 10 ? '0' + this.state.breakSeconds : this.state.breakSeconds}`;
+      }
+      else {
+        this.audioHasPlayed = false;
+
+        if (this.audioHasPlayed === false) {
+          document.querySelector('audio').play();
+          this.audioHasPlayed === true;
+          clearInterval(this.timer);
+          this.workTimer = JSON.parse(localStorage.getItem('workTimer')) || 1500;
+          this.breakTimer = JSON.parse(localStorage.getItem('breakTimer')) || 300;
+          this.setNewTimer();
+          this.countDown();
+          this.audioHasPlayed = false;
+        }
+      }
+    }
   }
 
   handleChange(event) {
@@ -115,7 +164,7 @@ export default class App extends Component {
           </div>
           {/* TIMER BUTTONS */}
           <div className="button-group">
-            <button type="button" className="timer-button" aria-label="Play" title="Play">
+            <button type="button" className="timer-button" onClick={() => this.countDown()} aria-label="Play" title="Play">
               <span className="fa fa-play fa-lg"></span>
             </button>
             <button type="button" className="timer-button" aria-label="Reset" title="Reset">

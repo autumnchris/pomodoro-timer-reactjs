@@ -80,6 +80,10 @@ export default class App extends Component {
     }
   }
 
+  pauseTimer() {
+    clearInterval(this.timer);
+  }
+
   handleChange(event) {
     this.setState({
       [event.target.name]: event.target.value

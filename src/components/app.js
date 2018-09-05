@@ -7,6 +7,8 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      workTimerInput: '',
+      breakTimerInput: '',
       workMinutes: null,
       workSeconds: null,
       breakMinutes: null,
@@ -20,10 +22,18 @@ export default class App extends Component {
 
   setNewTimer() {
     this.setState({
+      workTimerInput: this.workTimer / 60,
+      breakTimerInput: this.breakTimer / 60,
       workMinutes: parseInt(this.workTimer / 60, 10),
       workSeconds: parseInt(this.workTimer % 60, 10),
       breakMinutes: parseInt(this.breakTimer / 60, 10),
       breakSeconds: parseInt(this.breakTimer % 60, 10)
+    });
+  }
+
+  handleChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value
     });
   }
 
@@ -73,11 +83,11 @@ export default class App extends Component {
                 <form className="settings-form">
                   <div className="form-group">
                     <label htmlFor="work-timer-input">Set Work Time:</label>
-                    <input type="text" name="workTimerInput" id="work-timer-input" required />
+                    <input type="text" name="workTimerInput" onChange={(event) => this.handleChange(event)} value={this.state.workTimerInput} id="work-timer-input" required />
                   </div>
                   <div className="form-group">
                     <label htmlFor="break-timer-input">Set Break Time:</label>
-                    <input type="text" name="breakTimerInput" id="break-timer-input" required />
+                    <input type="text" name="breakTimerInput" onChange={(event) => this.handleChange(event)} value={this.state.breakTimerInput} id="break-timer-input" required />
                   </div>
                   {/* ERROR MESSAGE */}
                   <p className="message error-message" style={this.state.errorStyle}><span className="fa fa-exclamation-circle fa-lg fa-fw"></span> Please enter numbers between 1 and 60.</p>

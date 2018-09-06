@@ -4,6 +4,10 @@ My project for the [Build a Pomodoro Clock challenge](https://learn.freecodecamp
 
 ---
 
+## Demo
+
+View project demo at [https://autumnchris.github.io/pomodoro-timer-react](https://autumnchris.github.io/pomodoro-timer-react).
+
 ## Installation
 
 ```

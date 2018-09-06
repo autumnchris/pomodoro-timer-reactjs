@@ -167,7 +167,7 @@ export default class App extends Component {
             </div>
           </div>
           {/* TIMER BUTTONS */}
-          <div className="button-group">
+          <div className="button-group timer-buttons">
             <button type="button" className="timer-button" onClick={() => this.countDown()} aria-label="Play" title="Play">
               <span className="fa fa-play fa-lg"></span>
             </button>

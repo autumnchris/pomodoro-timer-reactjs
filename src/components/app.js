@@ -124,6 +124,34 @@ export default class App extends Component {
     });
   }
 
+  handleSubmit(event) {
+    event.preventDefault();
+
+    if (!isNaN(this.state.workTimerInput) && !isNaN(this.state.breakTimerInput) && this.state.workTimerInput >= 1 && this.state.workTimerInput <= 60 && this.state.breakTimerInput >= 1 && this.state.breakTimerInput <= 60) {
+      clearInterval(this.timer);
+      this.workTimer = this.state.workTimerInput * 60;
+      this.breakTimer = this.state.breakTimerInput * 60;
+      this.setState({
+        currentButton: {
+          func: () => this.countDown(),
+          icon: 'fa-play',
+          title: 'Play'
+        },
+        errorStyle: {display: 'none'}
+      });
+      this.setNewTimer();
+      localStorage.setItem('workTimer', JSON.stringify(this.workTimer));
+      localStorage.setItem('breakTimer', JSON.stringify(this.breakTimer));
+      this.closeModal();
+      document.title = 'Pomodoro Timer';
+    }
+    else {
+      this.setState({
+        errorStyle: {display: 'block'}
+      });
+    }
+  }
+
   openModal() {
     this.setState({
       modalStyle: {display: 'block'}
@@ -167,7 +195,7 @@ export default class App extends Component {
               </div>
               <div className="modal-body">
                 {/* SETTINGS FORM */}
-                <form className="settings-form">
+                <form className="settings-form" onSubmit={(event) => this.handleSubmit(event)}>
                   <div className="form-group">
                     <label htmlFor="work-timer-input">Set Work Time:</label>
                     <input type="text" name="workTimerInput" onChange={(event) => this.handleChange(event)} value={this.state.workTimerInput} id="work-timer-input" required />

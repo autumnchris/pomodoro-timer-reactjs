@@ -13,6 +13,11 @@ export default class App extends Component {
       workSeconds: null,
       breakMinutes: null,
       breakSeconds: null,
+      currentButton: {
+        func: () => this.countDown(),
+        icon: 'fa-play',
+        title: 'Play'
+      },
       modalStyle: {display: 'none'},
       errorStyle: {display: 'none'}
     };
@@ -36,6 +41,13 @@ export default class App extends Component {
 
   countDown() {
     this.timer = setInterval(this.playTimer, 1000);
+    this.setState({
+      currentButton: {
+        func: () => this.pauseTimer(),
+        icon: 'fa-pause',
+        title: 'Pause'
+      }
+    });
   }
 
   playTimer() {
@@ -82,6 +94,13 @@ export default class App extends Component {
 
   pauseTimer() {
     clearInterval(this.timer);
+    this.setState({
+      currentButton: {
+        func: () => this.countDown(),
+        icon: 'fa-play',
+        title: 'Play'
+      }
+    });
   }
 
   handleChange(event) {
@@ -168,8 +187,8 @@ export default class App extends Component {
           </div>
           {/* TIMER BUTTONS */}
           <div className="button-group timer-buttons">
-            <button type="button" className="timer-button" onClick={() => this.countDown()} aria-label="Play" title="Play">
-              <span className="fa fa-play fa-lg"></span>
+            <button type="button" className="timer-button" onClick={this.state.currentButton.func} aria-label={this.state.currentButton.title} title={this.state.currentButton.title}>
+              <span className={`fa ${this.state.currentButton.icon} fa-lg`}></span>
             </button>
             <button type="button" className="timer-button" aria-label="Reset" title="Reset">
               <span className="fa fa-redo-alt fa-lg"></span>

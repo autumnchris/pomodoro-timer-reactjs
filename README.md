@@ -4,6 +4,15 @@ My project for the [Build a Pomodoro Clock challenge](https://learn.freecodecamp
 
 ---
 
+## Built With
+* [React](https://reactjs.org)
+* [Sass](http://sass-lang.com)
+* [Webpack](https://webpack.js.org)
+* [Babel](https://babeljs.io)
+* [Font Awesome](https://fontawesome.com)
+* LocalStorage
+* [Wink sound effect](http://www.orangefreesounds.com)
+
 ## Demo
 
 View project demo at [https://autumnchris.github.io/pomodoro-timer-react](https://autumnchris.github.io/pomodoro-timer-react).

@@ -103,6 +103,21 @@ export default class App extends Component {
     });
   }
 
+  resetTimer() {
+    clearInterval(this.timer);
+    this.workTimer = JSON.parse(localStorage.getItem('workTimer')) || 1500;
+    this.breakTimer = JSON.parse(localStorage.getItem('breakTimer')) || 300;
+    this.setNewTimer();
+    this.setState({
+      currentButton: {
+        func: () => this.countDown(),
+        icon: 'fa-play',
+        title: 'Play'
+      }
+    });
+    document.title = 'Pomodoro Timer';
+  }
+
   handleChange(event) {
     this.setState({
       [event.target.name]: event.target.value
@@ -190,7 +205,7 @@ export default class App extends Component {
             <button type="button" className="timer-button" onClick={this.state.currentButton.func} aria-label={this.state.currentButton.title} title={this.state.currentButton.title}>
               <span className={`fa ${this.state.currentButton.icon} fa-lg`}></span>
             </button>
-            <button type="button" className="timer-button" aria-label="Reset" title="Reset">
+            <button type="button" className="timer-button" onClick={() => this.resetTimer()} aria-label="Reset" title="Reset">
               <span className="fa fa-redo-alt fa-lg"></span>
             </button>
           </div>

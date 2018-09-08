@@ -87,6 +87,7 @@ html {
           text-align: left;
           input[type=text] {
             border-bottom: 1px solid $dark-gray;
+            margin-left: 5px;
             max-width: 40px;
           }
         }
@@ -110,7 +111,7 @@ html {
           input[type=button]:focus {
             background: #404040;
             color: $blue;
-            margin: 0 3px;
+            margin: 0 3px 0 8px;
             padding: 10px;
             &:hover {
               background: $dark-gray;

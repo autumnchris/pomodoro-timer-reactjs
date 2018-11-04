@@ -20,13 +20,6 @@ module.exports = {
         }
       },
       {
-        test: /\.(mp3|wav)$/,
-        loader: 'url-loader',
-        options: {
-          limit: 1000000,
-        }
-      },
-      {
         test: /\.scss$/,
         loader: ExtractTextPlugin.extract({
           use:['css-loader', 'sass-loader'],

@@ -1,18 +1,15 @@
 import React, { Component } from 'react';
 
-const audio = require('.././audio/wink-sound-effect.mp3');
-
 export default class App extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      workTimerInput: '',
-      breakTimerInput: '',
-      workMinutes: null,
-      workSeconds: null,
-      breakMinutes: null,
-      breakSeconds: null,
+      workLength: JSON.parse(localStorage.getItem('workTimer')) || 25,
+      breakLength: JSON.parse(localStorage.getItem('breakTimer')) || 5,
+      currentMinutes: JSON.parse(localStorage.getItem('workTimer')) || 25,
+      currentSeconds: 0,
+      currentSession: 'Work',
       currentButton: {
         func: () => this.countDown(),
         icon: 'fa-play',
@@ -22,21 +19,9 @@ export default class App extends Component {
       errorStyle: {display: 'none'}
     };
     this.timer = null;
-    this.workTimer = JSON.parse(localStorage.getItem('workTimer')) || 1500;
-    this.breakTimer = JSON.parse(localStorage.getItem('breakTimer')) || 300;
-    this.audioHasPlayed = false;
+    this.workTimer = this.state.workLength * 60;
+    this.breakTimer = this.state.breakLength * 60;
     this.playTimer = this.playTimer.bind(this);
-  }
-
-  setNewTimer() {
-    this.setState({
-      workTimerInput: this.workTimer / 60,
-      breakTimerInput: this.breakTimer / 60,
-      workMinutes: parseInt(this.workTimer / 60, 10),
-      workSeconds: parseInt(this.workTimer % 60, 10),
-      breakMinutes: parseInt(this.breakTimer / 60, 10),
-      breakSeconds: parseInt(this.breakTimer % 60, 10)
-    });
   }
 
   countDown() {
@@ -52,48 +37,52 @@ export default class App extends Component {
 
   playTimer() {
 
-    if (this.workTimer !== 0) {
+    if (this.workTimer > 0) {
       this.workTimer--;
       this.setState({
-        workMinutes: parseInt(this.workTimer / 60, 10),
-        workSeconds: parseInt(this.workTimer % 60, 10)
+        currentMinutes: parseInt(this.workTimer / 60, 10),
+        currentSeconds: parseInt(this.workTimer % 60, 10)
       });
-      document.title = `Work – ${this.state.workMinutes < 10 ? '0' + this.state.workMinutes : this.state.workMinutes}:${this.state.workSeconds < 10 ? '0' + this.state.workSeconds : this.state.workSeconds}`;
     }
     else {
 
-      if (this.audioHasPlayed === false) {
-        document.querySelector('audio').play();
-        this.audioHasPlayed = true;
-      }
-
-      if (this.breakTimer !== 0) {
-        this.breakTimer--;
+      if (this.breakTimer === this.state.breakLength * 60 && this.state.currentMinutes === 0 && this.state.currentSeconds === 0) {
+        document.querySelector('.audio').play();
         this.setState({
-          breakMinutes: parseInt(this.breakTimer / 60, 10),
-          breakSeconds: parseInt(this.breakTimer % 60, 10)
+          currentMinutes: this.state.breakLength,
+          currentSeconds: 0,
+          currentSession: 'Break'
         });
-        document.title = `Break – ${this.state.breakMinutes < 10 ? '0' + this.state.breakMinutes : this.state.breakMinutes}:${this.state.breakSeconds < 10 ? '0' + this.state.breakSeconds : this.state.breakSeconds}`;
       }
       else {
-        this.audioHasPlayed = false;
 
-        if (this.audioHasPlayed === false) {
-          document.querySelector('audio').play();
-          this.audioHasPlayed === true;
+        if (this.breakTimer > 0) {
+          this.breakTimer--;
+          this.setState({
+            currentMinutes: parseInt(this.breakTimer / 60, 10),
+            currentSeconds: parseInt(this.breakTimer % 60, 10)
+          });
+        }
+        else {
+          document.querySelector('.audio').play();
           clearInterval(this.timer);
-          this.workTimer = JSON.parse(localStorage.getItem('workTimer')) || 1500;
-          this.breakTimer = JSON.parse(localStorage.getItem('breakTimer')) || 300;
-          this.setNewTimer();
+          this.workTimer = this.state.workLength * 60;
+          this.breakTimer = this.state.breakLength * 60;
+          this.setState({
+            currentMinutes: parseInt(this.workTimer / 60, 10),
+            currentSeconds: parseInt(this.workTimer % 60, 10),
+            currentSession: 'Work'
+          });
           this.countDown();
-          this.audioHasPlayed = false;
         }
       }
     }
+    document.title = `${this.state.currentSession} – ${this.state.currentMinutes < 10 ? '0' + this.state.currentMinutes : this.state.currentMinutes}:${this.state.currentSeconds < 10 ? '0' + this.state.currentSeconds : this.state.currentSeconds}`;
   }
 
   pauseTimer() {
     clearInterval(this.timer);
+    document.querySelector('.audio').pause();
     this.setState({
       currentButton: {
         func: () => this.countDown(),
@@ -105,10 +94,14 @@ export default class App extends Component {
 
   resetTimer() {
     clearInterval(this.timer);
-    this.workTimer = JSON.parse(localStorage.getItem('workTimer')) || 1500;
-    this.breakTimer = JSON.parse(localStorage.getItem('breakTimer')) || 300;
-    this.setNewTimer();
+    document.querySelector('.audio').pause();
+    document.querySelector('.audio').currentTime = 0;
+    this.workTimer = this.state.workLength * 60;
+    this.breakTimer = this.state.breakLength * 60;
     this.setState({
+      currentMinutes: this.state.workLength,
+      currentSeconds: 0,
+      currentSession: 'Work',
       currentButton: {
         func: () => this.countDown(),
         icon: 'fa-play',
@@ -127,11 +120,14 @@ export default class App extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    if (!isNaN(this.state.workTimerInput) && !isNaN(this.state.breakTimerInput) && this.state.workTimerInput >= 1 && this.state.workTimerInput <= 60 && this.state.breakTimerInput >= 1 && this.state.breakTimerInput <= 60) {
+    if (!isNaN(this.state.workLength) && !isNaN(this.state.breakLength) && this.state.workLength >= 1 && this.state.workLength <= 60 && this.state.breakLength >= 1 && this.state.breakLength <= 60) {
       clearInterval(this.timer);
-      this.workTimer = this.state.workTimerInput * 60;
-      this.breakTimer = this.state.breakTimerInput * 60;
+      this.workTimer = this.state.workLength * 60;
+      this.breakTimer = this.state.breakLength * 60;
       this.setState({
+        currentMinutes: this.state.workLength,
+        currentSeconds: 0,
+        currentSession: 'Work',
         currentButton: {
           func: () => this.countDown(),
           icon: 'fa-play',
@@ -139,9 +135,8 @@ export default class App extends Component {
         },
         errorStyle: {display: 'none'}
       });
-      this.setNewTimer();
-      localStorage.setItem('workTimer', JSON.stringify(this.workTimer));
-      localStorage.setItem('breakTimer', JSON.stringify(this.breakTimer));
+      localStorage.setItem('workTimer', JSON.stringify(this.state.workLength));
+      localStorage.setItem('breakTimer', JSON.stringify(this.state.breakLength));
       this.closeModal();
       document.title = 'Pomodoro Timer';
     }
@@ -165,8 +160,6 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    this.setNewTimer();
-
     window.addEventListener('click', (event) => {
 
       if (event.target.id === 'modal') {
@@ -197,12 +190,12 @@ export default class App extends Component {
                 {/* SETTINGS FORM */}
                 <form className="settings-form" onSubmit={(event) => this.handleSubmit(event)}>
                   <div className="form-group">
-                    <label htmlFor="work-timer-input">Set Work Time:</label>
-                    <input type="text" name="workTimerInput" onChange={(event) => this.handleChange(event)} value={this.state.workTimerInput} id="work-timer-input" required />
+                    <label htmlFor="work-length">Set Work Time:</label>
+                    <input type="text" name="workLength" onChange={(event) => this.handleChange(event)} value={this.state.workLength} id="work-length" required />
                   </div>
                   <div className="form-group">
-                    <label htmlFor="break-timer-input">Set Break Time:</label>
-                    <input type="text" name="breakTimerInput" onChange={(event) => this.handleChange(event)} value={this.state.breakTimerInput} id="break-timer-input" required />
+                    <label htmlFor="break-length">Set Break Time:</label>
+                    <input type="text" name="breakLength" onChange={(event) => this.handleChange(event)} value={this.state.breakLength} id="break-length" required />
                   </div>
                   {/* ERROR MESSAGE */}
                   <p className="message error-message" style={this.state.errorStyle}><span className="fa fa-exclamation-circle fa-lg fa-fw"></span> Please enter numbers between 1 and 60.</p>
@@ -218,15 +211,9 @@ export default class App extends Component {
         </header>
         <main>
           {/* TIMERS */}
-          <div className="timers">
-            <div className="timer-card">
-              <h2>Work Session</h2>
-              <div className="timer">{this.state.workMinutes < 10 ? `0${this.state.workMinutes}` : this.state.workMinutes}:{this.state.workSeconds < 10 ? `0${this.state.workSeconds}` : this.state.workSeconds}</div>
-            </div>
-            <div className="timer-card">
-              <h2>Break Session</h2>
-              <div className="timer">{this.state.breakMinutes < 10 ? `0${this.state.breakMinutes}` : this.state.breakMinutes}:{this.state.breakSeconds < 10 ? `0${this.state.breakSeconds}` : this.state.breakSeconds}</div>
-            </div>
+          <div className="timer-card">
+            <h2>{`${this.state.currentSession} Session`}</h2>
+            <div className="timer">{this.state.currentMinutes < 10 ? `0${this.state.currentMinutes}` : this.state.currentMinutes}:{this.state.currentSeconds < 10 ? `0${this.state.currentSeconds}` : this.state.currentSeconds}</div>
           </div>
           {/* TIMER BUTTONS */}
           <div className="button-group timer-buttons">
@@ -238,7 +225,7 @@ export default class App extends Component {
             </button>
           </div>
           {/* AUDIO */}
-          <audio src={audio} />
+          <audio src="https://dl.dropbox.com/s/nacdk0xey4io5d8/wink-sound-effect.mp3" className="audio" />
         </main>
         {/* FOOTER */}
         <footer>Coded by <a href="https://autumnbullard-portfolio.herokuapp.com" target="_blank">Autumn Bullard</a></footer>

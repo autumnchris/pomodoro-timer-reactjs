@@ -124,34 +124,23 @@ html {
   main {
     padding-top: 18%;
     padding-bottom: 70px;
-    .timers {
-      display: grid;
-      grid-row-gap: 20px;
-      grid-template-columns: 90%;
-      justify-content: space-evenly;
+    .timer-card {
+      background: rgba(13, 13, 13, 0.2);
+      border-radius: 4px;
       margin: auto;
-      max-width: 650px;
-      @media only screen and (min-width: $desktop-view) {
-        grid-template-columns: 45% 45%;
+      max-width: 300px;
+      padding: 20px;
+      width: 100%;
+      h2 {
+        color: $white;
+        font-size: 1rem;
+        font-weight: 300;
+        text-align: left;
       }
-      .timer-card {
-        background: rgba(13, 13, 13, 0.2);
-        border-radius: 4px;
-        margin: auto;
-        max-width: 300px;
-        padding: 20px;
-        width: 100%;
-        h2 {
-          color: $white;
-          font-size: 1rem;
-          font-weight: 300;
-          text-align: left;
-        }
-        .timer {
-          color: $blue;
-          font-size: 2.5rem;
-          margin-top: 15px;
-        }
+      .timer {
+        color: $blue;
+        font-size: 2.5rem;
+        margin-top: 15px;
       }
     }
     .timer-buttons {

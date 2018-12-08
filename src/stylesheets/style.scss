@@ -1,9 +1,5 @@
-$dark-gray: #333;
-$white: #fff;
-$blue: #1ad1ff;
-
-$tablet-view: 330px;
-$desktop-view: 640px;
+@import 'variables';
+@import 'reset';
 
 *:focus {
   box-shadow: 0 0 3px 3px rgba(65, 180, 250, 0.8);

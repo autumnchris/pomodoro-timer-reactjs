@@ -1,11 +1,11 @@
-# Pomodoro Timer (React)
+# Pomodoro Timer (React.js)
 
-My project for the [Build a Pomodoro Clock challenge](https://learn.freecodecamp.org/front-end-libraries/front-end-libraries-projects/build-a-pomodoro-clock) as part of the curriculum for the Front End Libraries Certification on [Free Code Camp](https://www.freecodecamp.org). Built with React.
+My project for the [Build a Pomodoro Clock challenge](https://learn.freecodecamp.org/front-end-libraries/front-end-libraries-projects/build-a-pomodoro-clock) as part of the curriculum for the Front End Libraries Certification on [Free Code Camp](https://www.freecodecamp.org). Built with React.js.
 
 ---
 
 ## Built With
-* [React](https://reactjs.org)
+* [React.js](https://reactjs.org)
 * [Sass](http://sass-lang.com)
 * [Webpack](https://webpack.js.org)
 * [Babel](https://babeljs.io)
@@ -15,13 +15,13 @@ My project for the [Build a Pomodoro Clock challenge](https://learn.freecodecamp
 
 ## Demo
 
-View project demo at [https://autumnchris.github.io/pomodoro-timer-react](https://autumnchris.github.io/pomodoro-timer-react).
+View project demo at [https://autumnchris.github.io/pomodoro-timer-reactjs](https://autumnchris.github.io/pomodoro-timer-reactjs).
 
 ## Installation
 
 ```
-$ git clone https://github.com/autumnchris/pomodoro-timer-react.git
-$ cd pomodoro-timer-react
+$ git clone https://github.com/autumnchris/pomodoro-timer-reactjs.git
+$ cd pomodoro-timer-reactjs
 $ npm install
 $ npm start
 ```

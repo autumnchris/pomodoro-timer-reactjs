@@ -228,7 +228,7 @@ export default class App extends Component {
           <audio src="https://dl.dropbox.com/s/nacdk0xey4io5d8/wink-sound-effect.mp3" className="audio" />
         </main>
         {/* FOOTER */}
-        <footer>Coded by <a href="https://autumnbullard-portfolio.herokuapp.com" target="_blank">Autumn Bullard</a></footer>
+        <footer>Created by <a href="https://autumnbullard-portfolio.herokuapp.com" target="_blank">Autumn Bullard</a> &copy; {new Date().getFullYear()}</footer>
       </div>
     );
   }

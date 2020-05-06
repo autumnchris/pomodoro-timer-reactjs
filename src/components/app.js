@@ -175,52 +175,48 @@ export default class App extends Component {
       <div className="body">
         {/* HEADER */}
         <header>
+          <div className="settings-button-container">
+            <button type="button" className="button settings-button" onClick={() => this.openModal()} aria-label="Settings" title="Settings">
+              <span className="fa fa-cog"></span>
+            </button>
+          </div>
           <h1>Pomodoro Timer</h1>
-          {/* SETTINGS BUTTON */}
-          <button type="button" className="settings" onClick={() => this.openModal()} aria-label="Settings" title="Settings">
-            <span className="fa fa-cog"></span>
-          </button>
+        </header>
+        <main>
           {/* SETTINGS MODAL */}
-          <div id="modal" style={this.state.modalStyle}>
+          <div className="modal" id="modal" style={this.state.modalStyle}>
             <div className="modal-content">
-              <div className="modal-header">
-                <h2>Timer Settings</h2>
-              </div>
+              <div className="modal-header">Set Custom Timer (in minutes)</div>
               <div className="modal-body">
-                {/* SETTINGS FORM */}
                 <form className="settings-form" onSubmit={(event) => this.handleSubmit(event)}>
                   <div className="form-group">
-                    <label htmlFor="work-length">Set Work Time:</label>
+                    <label htmlFor="work-length">Work:</label>
                     <input type="text" name="workLength" onChange={(event) => this.handleChange(event)} value={this.state.workLength} id="work-length" required />
                   </div>
                   <div className="form-group">
-                    <label htmlFor="break-length">Set Break Time:</label>
+                    <label htmlFor="break-length">Break:</label>
                     <input type="text" name="breakLength" onChange={(event) => this.handleChange(event)} value={this.state.breakLength} id="break-length" required />
                   </div>
-                  {/* ERROR MESSAGE */}
-                  <p className="message error-message" style={this.state.errorStyle}><span className="fa fa-exclamation-circle fa-lg fa-fw"></span> Please enter numbers between 1 and 60.</p>
-                  {/* FORM BUTTONS */}
+                  <p className="message error-message" style={this.state.errorStyle}><span className="fa fa-exclamation-circle fa-lg fa-fw"></span> Please enter a number between 1 and 60.</p>
                   <div className="button-group">
-                    <input type="submit" value="Save" />
-                    <input type="button" onClick={() => this.closeModal()} value="Cancel" />
+                    <input type="submit" className="button modal-button" value="Save" />
+                    <input type="button" className="button modal-button cancel" onClick={() => this.closeModal()} value="Cancel" />
                   </div>
                 </form>
               </div>
             </div>
           </div>
-        </header>
-        <main>
-          {/* TIMERS */}
+          {/* TIMER */}
           <div className="timer-card">
             <h2>{`${this.state.currentSession} Session`}</h2>
             <div className="timer">{this.state.currentMinutes < 10 ? `0${this.state.currentMinutes}` : this.state.currentMinutes}:{this.state.currentSeconds < 10 ? `0${this.state.currentSeconds}` : this.state.currentSeconds}</div>
           </div>
           {/* TIMER BUTTONS */}
           <div className="button-group timer-buttons">
-            <button type="button" className="timer-button" onClick={this.state.currentButton.func} aria-label={this.state.currentButton.title} title={this.state.currentButton.title}>
+            <button type="button" className="button timer-button" onClick={this.state.currentButton.func} aria-label={this.state.currentButton.title} title={this.state.currentButton.title}>
               <span className={`fa ${this.state.currentButton.icon} fa-lg`}></span>
             </button>
-            <button type="button" className="timer-button" onClick={() => this.resetTimer()} aria-label="Reset" title="Reset">
+            <button type="button" className="button timer-button" onClick={() => this.resetTimer()} aria-label="Reset" title="Reset">
               <span className="fa fa-redo-alt fa-lg"></span>
             </button>
           </div>

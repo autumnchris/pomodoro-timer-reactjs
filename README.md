@@ -9,6 +9,7 @@ My project for the [Build a Pomodoro Clock challenge](https://learn.freecodecamp
 * [Sass](http://sass-lang.com)
 * [Webpack](https://webpack.js.org)
 * [Babel](https://babeljs.io)
+* [Normalize.css](https://necolas.github.io/normalize.css)
 * [Font Awesome](https://fontawesome.com)
 * LocalStorage
 * [Wink sound effect](http://www.orangefreesounds.com)

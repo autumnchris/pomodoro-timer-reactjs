@@ -1,5 +1,4 @@
 import React from 'react';
-import SettingsError from './settings-error';
 
 const SettingsModal = ({ workLength, breakLength, handleChange, handleSubmit, settingsFormError, showModal }) => {
 
@@ -22,7 +21,7 @@ const SettingsModal = ({ workLength, breakLength, handleChange, handleSubmit, se
               <input type="button" className="button modal-button cancel" onClick={() => showModal(false)} value="Cancel" />
             </div>
           </form>
-          { settingsFormError ? <SettingsError /> : null}
+          { settingsFormError ? <p className="message error-message"><span className="fa fa-exclamation-circle fa-lg fa-fw"></span> Please enter a number between 1 and 60.</p> : null}
         </div>
       </div>
     </div>

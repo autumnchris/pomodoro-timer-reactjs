@@ -19,6 +19,12 @@ module.exports = {
         }
       },
       {
+        test: /\.(mp3|wav)$/,
+        use: [
+          'url-loader'
+        ]
+      },
+      {
         test: /\.css|.scss?$/,
         use: [
           MiniCssExtractPlugin.loader,

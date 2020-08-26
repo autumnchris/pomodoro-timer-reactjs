@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import timerDone from '../audio/timer-done.mp3';
+import SettingsModal from './settings-modal';
 
 export default class App extends Component {
 
@@ -15,12 +17,15 @@ export default class App extends Component {
         icon: 'fa-play',
         title: 'Play'
       },
-      modalStyle: {display: 'none'},
-      errorStyle: {display: 'none'}
+      isModalOpen: false,
+      settingsFormError: false
     };
     this.timer = null;
     this.workTimer = this.state.workLength * 60;
     this.breakTimer = this.state.breakLength * 60;
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.showModal = this.showModal.bind(this);
     this.playTimer = this.playTimer.bind(this);
   }
 
@@ -120,7 +125,7 @@ export default class App extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    if (!isNaN(this.state.workLength) && !isNaN(this.state.breakLength) && this.state.workLength >= 1 && this.state.workLength <= 60 && this.state.breakLength >= 1 && this.state.breakLength <= 60) {
+    if (this.state.workLength && this.state.breakLength && !isNaN(this.state.workLength) && !isNaN(this.state.breakLength) && this.state.workLength >= 1 && this.state.workLength <= 60 && this.state.breakLength >= 1 && this.state.breakLength <= 60) {
       clearInterval(this.timer);
       this.workTimer = this.state.workLength * 60;
       this.breakTimer = this.state.breakLength * 60;
@@ -133,29 +138,23 @@ export default class App extends Component {
           icon: 'fa-play',
           title: 'Play'
         },
-        errorStyle: {display: 'none'}
+        settingsFormError: false
       });
       localStorage.setItem('workTimer', JSON.stringify(this.state.workLength));
       localStorage.setItem('breakTimer', JSON.stringify(this.state.breakLength));
-      this.closeModal();
+      this.showModal(false);
       document.title = 'Pomodoro Timer';
     }
     else {
       this.setState({
-        errorStyle: {display: 'block'}
+        settingsFormError: true
       });
     }
   }
 
-  openModal() {
+  showModal(status) {
     this.setState({
-      modalStyle: {display: 'block'}
-    });
-  }
-
-  closeModal() {
-    this.setState({
-      modalStyle: {display: 'none'}
+      isModalOpen: status
     });
   }
 
@@ -163,9 +162,7 @@ export default class App extends Component {
     window.addEventListener('click', (event) => {
 
       if (event.target.id === 'modal') {
-        this.setState({
-          modalStyle: {display: 'none'}
-        });
+        this.showModal(false);
       }
     });
   }
@@ -173,45 +170,20 @@ export default class App extends Component {
   render() {
     return (
       <div className="body">
-        {/* HEADER */}
         <header>
           <div className="settings-button-container">
-            <button type="button" className="button settings-button" onClick={() => this.openModal()} aria-label="Settings" title="Settings">
+            <button type="button" className="button settings-button" onClick={() => this.showModal(true)} aria-label="Settings" title="Settings">
               <span className="fa fa-cog"></span>
             </button>
           </div>
+          {this.state.isModalOpen ? <SettingsModal workLength={this.state.workLength} breakLength={this.state.breakLength} handleChange={this.handleChange} handleSubmit={this.handleSubmit} settingsFormError={this.state.settingsFormError} showModal={this.showModal} /> : null}
           <h1>Pomodoro Timer</h1>
         </header>
         <main>
-          {/* SETTINGS MODAL */}
-          <div className="modal" id="modal" style={this.state.modalStyle}>
-            <div className="modal-content">
-              <div className="modal-header">Set Custom Timer (in minutes)</div>
-              <div className="modal-body">
-                <form className="settings-form" onSubmit={(event) => this.handleSubmit(event)}>
-                  <div className="form-group">
-                    <label htmlFor="work-length">Work:</label>
-                    <input type="text" name="workLength" onChange={(event) => this.handleChange(event)} value={this.state.workLength} id="work-length" required />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="break-length">Break:</label>
-                    <input type="text" name="breakLength" onChange={(event) => this.handleChange(event)} value={this.state.breakLength} id="break-length" required />
-                  </div>
-                  <p className="message error-message" style={this.state.errorStyle}><span className="fa fa-exclamation-circle fa-lg fa-fw"></span> Please enter a number between 1 and 60.</p>
-                  <div className="button-group">
-                    <input type="submit" className="button modal-button" value="Save" />
-                    <input type="button" className="button modal-button cancel" onClick={() => this.closeModal()} value="Cancel" />
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-          {/* TIMER */}
           <div className="timer-card">
             <h2>{`${this.state.currentSession} Session`}</h2>
             <div className="timer">{this.state.currentMinutes < 10 ? `0${this.state.currentMinutes}` : this.state.currentMinutes}:{this.state.currentSeconds < 10 ? `0${this.state.currentSeconds}` : this.state.currentSeconds}</div>
           </div>
-          {/* TIMER BUTTONS */}
           <div className="button-group timer-buttons">
             <button type="button" className="button timer-button" onClick={this.state.currentButton.func} aria-label={this.state.currentButton.title} title={this.state.currentButton.title}>
               <span className={`fa ${this.state.currentButton.icon} fa-lg`}></span>
@@ -220,10 +192,8 @@ export default class App extends Component {
               <span className="fa fa-redo-alt fa-lg"></span>
             </button>
           </div>
-          {/* AUDIO */}
-          <audio src="https://dl.dropbox.com/s/nacdk0xey4io5d8/wink-sound-effect.mp3" className="audio" />
+          <audio src={timerDone} className="audio" />
         </main>
-        {/* FOOTER */}
         <footer>Created by <a href="https://autumnbullard-portfolio.herokuapp.com" target="_blank">Autumn Bullard</a> &copy; {new Date().getFullYear()}</footer>
       </div>
     );

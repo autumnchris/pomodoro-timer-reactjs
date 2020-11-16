@@ -146,6 +146,9 @@ textarea:focus,
     &:hover {
       background: rgba(change-color($black, $lightness: 5%), 0.2);
     }
+    .settings-icon {
+      pointer-events: none;
+    }
   }
 }
 
@@ -272,6 +275,9 @@ h1 {
     &:hover {
       background: transparent;
       color: $blue;
+    }
+    .timer-icon {
+      pointer-events: none;
     }
   }
 }

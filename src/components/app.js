@@ -1,43 +1,41 @@
-import React, { Component } from 'react';
+import React from 'react';
 import timerDone from '../audio/timer-done.mp3';
 import SettingsModal from './settings-modal';
 
-export default class App extends Component {
+class App extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      workLength: JSON.parse(localStorage.getItem('workTimer')) || 25,
-      breakLength: JSON.parse(localStorage.getItem('breakTimer')) || 5,
-      currentMinutes: JSON.parse(localStorage.getItem('workTimer')) || 25,
-      currentSeconds: 0,
-      currentSession: 'Work',
+      workValue: '',
+      breakValue: '',
+      currentSession: '',
+      currentMinutes: null,
+      currentSeconds: null,
       currentButton: {
         func: () => this.countDown(),
-        icon: 'fa-play',
-        title: 'Play'
+        action: 'play'
       },
       isModalOpen: false,
       settingsFormError: false
     };
     this.timer = null;
-    this.workTimer = this.state.workLength * 60;
-    this.breakTimer = this.state.breakLength * 60;
+    this.workTimer = this.state.workValue * 60;
+    this.breakTimer = this.state.breakValue * 60;
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.showModal = this.showModal.bind(this);
     this.playTimer = this.playTimer.bind(this);
   }
 
-  countDown() {
-    this.timer = setInterval(this.playTimer, 1000);
-    this.setState({
-      currentButton: {
-        func: () => this.pauseTimer(),
-        icon: 'fa-pause',
-        title: 'Pause'
-      }
-    });
+  renderWorkValue(workValue) {
+    workValue ? localStorage.setItem('workValue', JSON.stringify(Number(workValue))) : null;
+    return JSON.parse(localStorage.getItem('workValue')) || 25;
+  }
+
+  renderBreakValue(breakValue) {
+    breakValue ? localStorage.setItem('breakValue', JSON.stringify(Number(breakValue))) : null;
+    return JSON.parse(localStorage.getItem('breakValue')) || 5;;
   }
 
   playTimer() {
@@ -51,10 +49,10 @@ export default class App extends Component {
     }
     else {
 
-      if (this.breakTimer === this.state.breakLength * 60 && this.state.currentMinutes === 0 && this.state.currentSeconds === 0) {
+      if (this.breakTimer === this.renderBreakValue() * 60 && this.state.currentMinutes === 0 && this.state.currentSeconds === 0) {
         document.querySelector('.audio').play();
         this.setState({
-          currentMinutes: this.state.breakLength,
+          currentMinutes: this.renderBreakValue(),
           currentSeconds: 0,
           currentSession: 'Break'
         });
@@ -71,18 +69,29 @@ export default class App extends Component {
         else {
           document.querySelector('.audio').play();
           clearInterval(this.timer);
-          this.workTimer = this.state.workLength * 60;
-          this.breakTimer = this.state.breakLength * 60;
+          this.workTimer = this.renderWorkValue() * 60;
+          this.breakTimer = this.renderBreakValue() * 60;
           this.setState({
-            currentMinutes: parseInt(this.workTimer / 60, 10),
-            currentSeconds: parseInt(this.workTimer % 60, 10),
+            currentMinutes: this.workTimer / 60,
+            currentSeconds: this.workTimer % 60,
             currentSession: 'Work'
           });
           this.countDown();
         }
       }
     }
+
     document.title = `${this.state.currentSession} – ${this.state.currentMinutes < 10 ? '0' + this.state.currentMinutes : this.state.currentMinutes}:${this.state.currentSeconds < 10 ? '0' + this.state.currentSeconds : this.state.currentSeconds}`;
+  }
+
+  countDown() {
+    this.timer = setInterval(this.playTimer, 1000);
+    this.setState({
+      currentButton: {
+        func: () => this.pauseTimer(),
+        action: 'pause'
+      }
+    });
   }
 
   pauseTimer() {
@@ -91,28 +100,30 @@ export default class App extends Component {
     this.setState({
       currentButton: {
         func: () => this.countDown(),
-        icon: 'fa-play',
-        title: 'Play'
+        action: 'play'
       }
     });
   }
 
-  resetTimer() {
+  resetTimer(workValue, breakValue) {
     clearInterval(this.timer);
-    document.querySelector('.audio').pause();
-    document.querySelector('.audio').currentTime = 0;
-    this.workTimer = this.state.workLength * 60;
-    this.breakTimer = this.state.breakLength * 60;
+    this.timer = null;
     this.setState({
-      currentMinutes: this.state.workLength,
-      currentSeconds: 0,
+      workValue,
+      breakValue,
       currentSession: 'Work',
+      currentMinutes: workValue,
+      currentSeconds: 0,
       currentButton: {
         func: () => this.countDown(),
-        icon: 'fa-play',
-        title: 'Play'
+        action: 'play'
       }
     });
+
+    document.querySelector('.audio').pause();
+    document.querySelector('.audio').currentTime = 0;
+    this.workTimer = workValue * 60;
+    this.breakTimer = breakValue * 60;
     document.title = 'Pomodoro Timer';
   }
 
@@ -122,28 +133,15 @@ export default class App extends Component {
     });
   }
 
-  handleSubmit(event) {
+  handleSubmit(event, workValue, breakValue) {
     event.preventDefault();
 
-    if (this.state.workLength && this.state.breakLength && !isNaN(this.state.workLength) && !isNaN(this.state.breakLength) && this.state.workLength >= 1 && this.state.workLength <= 60 && this.state.breakLength >= 1 && this.state.breakLength <= 60) {
-      clearInterval(this.timer);
-      this.workTimer = this.state.workLength * 60;
-      this.breakTimer = this.state.breakLength * 60;
+    if (!isNaN(workValue) && !isNaN(breakValue) && workValue >= 1 && workValue <= 60 && breakValue >= 1 && breakValue <= 60) {
       this.setState({
-        currentMinutes: this.state.workLength,
-        currentSeconds: 0,
-        currentSession: 'Work',
-        currentButton: {
-          func: () => this.countDown(),
-          icon: 'fa-play',
-          title: 'Play'
-        },
         settingsFormError: false
       });
-      localStorage.setItem('workTimer', JSON.stringify(this.state.workLength));
-      localStorage.setItem('breakTimer', JSON.stringify(this.state.breakLength));
+      this.resetTimer(this.renderWorkValue(workValue), this.renderBreakValue(breakValue));
       this.showModal(false);
-      document.title = 'Pomodoro Timer';
     }
     else {
       this.setState({
@@ -154,12 +152,17 @@ export default class App extends Component {
 
   showModal(status) {
     this.setState({
-      isModalOpen: status
+      workValue: this.renderWorkValue(),
+      breakValue: this.renderBreakValue(),
+      isModalOpen: status,
+      settingsFormError: false
     });
   }
 
   componentDidMount() {
-    window.addEventListener('click', (event) => {
+    this.resetTimer(this.renderWorkValue(), this.renderBreakValue());
+
+    window.addEventListener('click', event => {
 
       if (event.target.id === 'modal') {
         this.showModal(false);
@@ -176,7 +179,7 @@ export default class App extends Component {
               <span className="fa fa-cog"></span>
             </button>
           </div>
-          {this.state.isModalOpen ? <SettingsModal workLength={this.state.workLength} breakLength={this.state.breakLength} handleChange={this.handleChange} handleSubmit={this.handleSubmit} settingsFormError={this.state.settingsFormError} showModal={this.showModal} /> : null}
+          {this.state.isModalOpen ? <SettingsModal workValue={this.state.workValue} breakValue={this.state.breakValue} handleChange={this.handleChange} handleSubmit={this.handleSubmit} settingsFormError={this.state.settingsFormError} showModal={this.showModal} /> : null}
           <h1>Pomodoro Timer</h1>
         </header>
         <main>
@@ -185,10 +188,10 @@ export default class App extends Component {
             <div className="timer">{this.state.currentMinutes < 10 ? `0${this.state.currentMinutes}` : this.state.currentMinutes}:{this.state.currentSeconds < 10 ? `0${this.state.currentSeconds}` : this.state.currentSeconds}</div>
           </div>
           <div className="button-group timer-buttons">
-            <button type="button" className="button timer-button" onClick={this.state.currentButton.func} aria-label={this.state.currentButton.title} title={this.state.currentButton.title}>
-              <span className={`fa ${this.state.currentButton.icon} fa-lg`}></span>
+            <button type="button" className="button timer-button" onClick={this.state.currentButton.func} aria-label={this.state.currentButton.action} title={this.state.currentButton.action.replace(this.state.currentButton.action.charAt(0), this.state.currentButton.action.charAt(0).toUpperCase())}>
+              <span className={`fa fa-${this.state.currentButton.action} fa-lg`}></span>
             </button>
-            <button type="button" className="button timer-button" onClick={() => this.resetTimer()} aria-label="Reset" title="Reset">
+            <button type="button" className="button timer-button" onClick={() => this.resetTimer(this.renderWorkValue(), this.renderBreakValue())} aria-label="reset" title="Reset">
               <span className="fa fa-redo-alt fa-lg"></span>
             </button>
           </div>
@@ -199,3 +202,5 @@ export default class App extends Component {
     );
   }
 }
+
+export default App;

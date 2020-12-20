@@ -176,7 +176,7 @@ class App extends React.Component {
         <header>
           <div className="settings-button-container">
             <button type="button" className="button settings-button" onClick={() => this.showModal(true)} aria-label="Settings" title="Settings">
-              <span className="fa fa-cog"></span>
+              <span className="fa fa-cog settings-icon"></span>
             </button>
           </div>
           {this.state.isModalOpen ? <SettingsModal workValue={this.state.workValue} breakValue={this.state.breakValue} handleChange={this.handleChange} handleSubmit={this.handleSubmit} settingsFormError={this.state.settingsFormError} showModal={this.showModal} /> : null}
@@ -189,10 +189,10 @@ class App extends React.Component {
           </div>
           <div className="button-group timer-buttons">
             <button type="button" className="button timer-button" onClick={this.state.currentButton.func} aria-label={this.state.currentButton.action} title={this.state.currentButton.action.replace(this.state.currentButton.action.charAt(0), this.state.currentButton.action.charAt(0).toUpperCase())}>
-              <span className={`fa fa-${this.state.currentButton.action} fa-lg`}></span>
+              <span className={`fa fa-${this.state.currentButton.action} fa-lg timer-icon`}></span>
             </button>
             <button type="button" className="button timer-button" onClick={() => this.resetTimer(this.renderWorkValue(), this.renderBreakValue())} aria-label="reset" title="Reset">
-              <span className="fa fa-redo-alt fa-lg"></span>
+              <span className="fa fa-redo-alt fa-lg timer-icon"></span>
             </button>
           </div>
           <audio src={timerDone} className="audio" />

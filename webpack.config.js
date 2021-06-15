@@ -44,4 +44,4 @@ module.exports = {
      new TerserPlugin({ extractComments: false })
    ],
  }
-}
+};

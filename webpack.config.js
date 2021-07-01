@@ -3,15 +3,14 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   output: {
-    path: path.join(__dirname, 'public'),
+    path: path.join(__dirname, 'docs'),
     filename: 'index.bundle.js',
     assetModuleFilename: "assets/[hash][ext][query]"
   },
   devtool: "eval-cheap-source-map",
   devServer: {
     port: 8080,
-    contentBase: "./",
-    hot: true
+    watchContentBase: true
   },
   module: {
     rules: [

@@ -10,7 +10,7 @@ module.exports = {
   devtool: "eval-cheap-source-map",
   devServer: {
     port: 8080,
-    contentBase: "./public",
+    contentBase: "./",
     hot: true
   },
   module: {

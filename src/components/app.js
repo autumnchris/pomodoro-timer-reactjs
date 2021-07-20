@@ -172,7 +172,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="body">
+      <React.Fragment>
         <header>
           <div className="settings-button-container">
             <button type="button" className="button settings-button" onClick={() => this.showModal(true)} aria-label="Settings" title="Settings">
@@ -198,7 +198,7 @@ class App extends React.Component {
           <audio src={timerDone} className="audio" />
         </main>
         <footer>Created by <a href="https://autumnbullard-portfolio.herokuapp.com" target="_blank">Autumn Bullard</a> &copy; {new Date().getFullYear()}</footer>
-      </div>
+      </React.Fragment>
     );
   }
 }

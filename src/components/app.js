@@ -17,7 +17,10 @@ class App extends React.Component {
         action: 'play'
       },
       isModalOpen: false,
-      settingsFormError: false
+      settingsFormError: {
+        isError: false,
+        timer: ''
+      }
     };
     this.timer = null;
     this.workTimer = this.state.workValue * 60;
@@ -136,17 +139,33 @@ class App extends React.Component {
   handleSubmit(event, workValue, breakValue) {
     event.preventDefault();
 
-    if (!isNaN(workValue) && !isNaN(breakValue) && workValue >= 1 && workValue <= 60 && breakValue >= 1 && breakValue <= 60) {
+    if (isNaN(workValue) || workValue < 1 || workValue >= 61) {
       this.setState({
-        settingsFormError: false
+        settingsFormError: {
+          isError: true,
+          timer: 'Work Timer'
+        }
+      });
+    }
+    else if (isNaN(breakValue) || breakValue < 1 || breakValue >= 61) {
+      this.setState({
+        settingsFormError: {
+          isError: true,
+          timer: 'Break Timer'
+        }
+      });
+    }
+    else {
+      if (Math.floor(workValue) !== workValue) workValue = Math.floor(workValue);
+      if (Math.floor(breakValue) !== breakValue) breakValue = Math.floor(breakValue);
+      this.setState({
+        settingsFormError: {
+          isError: false,
+          timer: ''
+        }
       });
       this.resetTimer(this.renderWorkValue(workValue), this.renderBreakValue(breakValue));
       this.showModal(false);
-    }
-    else {
-      this.setState({
-        settingsFormError: true
-      });
     }
   }
 
@@ -155,7 +174,10 @@ class App extends React.Component {
       workValue: this.renderWorkValue(),
       breakValue: this.renderBreakValue(),
       isModalOpen: status,
-      settingsFormError: false
+      settingsFormError: {
+        isError: false,
+        timer: ''
+      }
     });
   }
 

@@ -170,6 +170,7 @@ class App extends React.Component {
   }
 
   showModal(status) {
+    status ? document.querySelector('body').classList.add('modal-open') : document.querySelector('body').classList.remove('modal-open');
     this.setState({
       workValue: this.renderWorkValue(),
       breakValue: this.renderBreakValue(),

@@ -1,6 +1,6 @@
 import React from 'react';
 import timerDone from '../audio/timer-done.mp3';
-import SettingsModal from './settings-modal';
+import SettingsModal from './SettingsModal';
 
 class App extends React.Component {
 
